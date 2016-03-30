@@ -3,6 +3,7 @@ package com.example.english.myapplication;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -49,7 +50,13 @@ public class CustomView extends View
         RecPaint.setStyle(Paint.Style.FILL);
         RecPaint.setAntiAlias(true);
         RecPaint.setColor(RecColor);
-        canvas.drawRect(0,0,viewHeight,viewHeight,RecPaint);
+        canvas.drawRect(0, 0, viewHeight, viewWidth, RecPaint);
+        RecPaint.setColor(Color.parseColor("#FFFFFF"));
+        for(int i=0; i<= viewHeight; i=i+30)
+        {
+            canvas.drawLine(i,0,i,viewWidth, RecPaint);
+            canvas.drawLine(0,i,viewHeight,i, RecPaint);
+        }
 
     }
 
