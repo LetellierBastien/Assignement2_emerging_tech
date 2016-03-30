@@ -17,7 +17,7 @@ import java.util.Random;
  * Created by english on 30/03/2016.
  */
 public class CustomView extends View
-{
+{ 
 
 
     private int RecColor;
