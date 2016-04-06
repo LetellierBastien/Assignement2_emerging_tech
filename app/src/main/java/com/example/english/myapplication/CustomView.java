@@ -113,7 +113,6 @@ public class CustomView extends View
                     }
                 }
                 tabHide[i]=nbMine;
-
             }
         }
         nbMarkedMine =0;
@@ -122,6 +121,42 @@ public class CustomView extends View
     }
     public int nbMarkedMine;
     public int uncoverCase;
+
+    public void automaticUncover(int i)
+    {
+        Log.d ("BUUUUUUG", "BUG " +i+" "+  i/10 + " " + i%10);
+        if(tabHide[i]==0) {
+            int borneXMin = -1;
+            int borneXMax = 1;
+            int borneYMin = -1;
+            int borneYMax = 1;
+            int x = i / 10;
+            int y = i % 10;
+            if (x == 0) {
+                borneXMin = 0;
+            } else if (x == 9) {
+                borneXMax = 0;
+            }
+
+            if (y == 0) {
+                borneYMin = 0;
+            } else if (y == 9) {
+                borneYMax = 0;
+            }
+
+            for (; borneXMin <= borneXMax; borneXMin++) {
+                for (int z = borneYMin; z <= borneYMax; z++) {
+                    if (tab[i + (borneXMin * 10 + z)]==0) {
+                        tab[i + (borneXMin * 10 + z)] = 1;
+                        if (tabHide[i + (borneXMin * 10 + z)] == 0) {
+                            automaticUncover(i + borneXMin * 10 + z);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public boolean onTouchEvent( MotionEvent event) {
 
@@ -140,17 +175,33 @@ public class CustomView extends View
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
+                        for(int i=0; i<100;i++)
+                        {
+                            if (tab[i]==0 && tabHide[i] ==10)
+                            {
+                                tab[i]=1;
+                            }
+                            else if (tab[i]==2 && tabHide[i] != 10)
+                            {
+                                tab[i]=3;
+                            }
+                        }
                         toast.show();
                     }
                     else if (uncoverCase == 80)
                     {
 
                         death = true;
+
                         CharSequence text = "Congratulation! You win ;)";
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
+                    }
+                    else if (tabHide[((int)event.getX()/40)*10+((int)event.getY()/40)]==0)
+                    {
+                        automaticUncover(((int)event.getX()/40)*10+((int)event.getY()/40));
                     }
 
                     invalidate();
@@ -211,7 +262,14 @@ public class CustomView extends View
             if (tab[i] == 2) {
                 RecPaint.setColor(Color.parseColor("#FFFF00"));
                 canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
-            } else if (tab[i] == 1 && tabHide[i] == 10) {
+            }else if (tab[i]==3)
+            {
+                RecPaint.setColor(Color.parseColor("#FF00FF"));
+                canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+                RecPaint.setColor(Color.parseColor("#000000"));
+                canvas.drawText("F", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+            }
+            else if (tab[i] == 1 && tabHide[i] == 10) {
                 RecPaint.setColor(Color.parseColor("#FF0000"));
                 canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
             } else if (tab[i] != 0) {
@@ -221,19 +279,15 @@ public class CustomView extends View
                     RecPaint.setColor(Color.parseColor("#0000FF"));
                     canvas.drawText("1", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
                 } else if (tab[i] == 1 && tabHide[i] == 2) {
-                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
-                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
-                    RecPaint.setColor(Color.parseColor("#00FF00"));
+                                       RecPaint.setColor(Color.parseColor("#00FF00"));
                     canvas.drawText("2", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
 
                 } else if (tab[i] == 1 && tabHide[i] == 3) {
-                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
-                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+
                     RecPaint.setColor(Color.parseColor("#FFFF00"));
                     canvas.drawText("3", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
                 } else if (tab[i] == 1 && tabHide[i] > 3) {
-                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
-                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+
                     RecPaint.setColor(Color.parseColor("#FF0000"));
                     canvas.drawText("" + tabHide[i], (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
                 }
