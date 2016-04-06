@@ -24,10 +24,25 @@ public class CustomView extends View
     private Paint RecPaint;
     private int [] tabHide = new int [100];
     private int [] tab = new int [100];
+    public boolean death;
+
 
     public CustomView(Context context , AttributeSet attrs) {
         super(context, attrs);
 
+        RecPaint = new Paint();
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.CustomView, 0, 0);
+        try {
+            RecColor = a.getInteger(R.styleable.CustomView_circleColor, 0);
+        } finally {
+            a.recycle();
+        }
+        reset();
+    }
+
+    public void reset()
+    {
         for(int i=0; i<100;i++)
         {
             tabHide[i]=0;
@@ -94,25 +109,22 @@ public class CustomView extends View
 
             }
         }
-
-
-        RecPaint = new Paint();
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-                R.styleable.CustomView, 0, 0);
-        try {
-            RecColor = a.getInteger(R.styleable.CustomView_circleColor, 0);
-        } finally {
-            a.recycle();
-        }
+        death = false;
+        invalidate();
     }
-
 
     public boolean onTouchEvent( MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN && !death){
             if (tab[((int)event.getX()/40)*10+((int)event.getY()/40)]==0) {
                 tab[((int) event.getX() / 40) * 10 + ((int) event.getY() / 40)] = 1;
+                if (tabHide[((int) event.getX() / 40) * 10 + ((int) event.getY() / 40)] == 10)
+                {
+                    death=true;
+                }
+
                 invalidate();
+
             }
 
         }
@@ -171,7 +183,7 @@ public class CustomView extends View
                 } else if (tab[i] == 1 && tabHide[i] == 3) {
                     RecPaint.setColor(Color.parseColor("#CCCCCC"));
                     canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
-                    RecPaint.setColor(Color.parseColor("#FFFF00")); 
+                    RecPaint.setColor(Color.parseColor("#FFFF00"));
                     canvas.drawText("3", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
                 } else if (tab[i] == 1 && tabHide[i] > 3) {
                     RecPaint.setColor(Color.parseColor("#CCCCCC"));

@@ -4,13 +4,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    public Button reset;
+    public CustomView cstmView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        cstmView = (CustomView) findViewById(R.id.custView);
+
+        reset = (Button) findViewById(R.id.button1);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                cstmView.reset();
+            }
+        });
+
     }
 
     @Override

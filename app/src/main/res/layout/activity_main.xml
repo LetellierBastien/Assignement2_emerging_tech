@@ -38,6 +38,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:id="@+id/button1"
+        android:text="Reset"
         android:layout_alignTop="@+id/button2"
         android:layout_alignLeft="@+id/custView"
         android:layout_alignStart="@+id/custView" />
