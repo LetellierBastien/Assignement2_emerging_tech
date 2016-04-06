@@ -17,7 +17,7 @@ import java.util.Random;
  * Created by english on 30/03/2016.
  */
 public class CustomView extends View
-{ 
+{
 
 
     private int RecColor;
@@ -30,7 +30,7 @@ public class CustomView extends View
 
         for(int i=0; i<100;i++)
         {
-            tabHide[i]=1;
+            tabHide[i]=0;
             tab[i]=0;
         }
         int x;
@@ -48,11 +48,53 @@ public class CustomView extends View
                 i++;
                 tabHide[x*10+y]=10;
             }
-            else
+
+        }
+
+        for(int i=0; i<100;i++)
+        {
+            if(tabHide[i]==0)
             {
-                Log.d("rnd?", "OOOOOOOOOOOOOK " + y + " " + x);
+                int nbMine=0;
+                int borneXMin=-1;
+                int borneXMax=1;
+                int borneYMin=-1;
+                int borneYMax=1;
+                x=i/10;
+                y=i%10;
+                if (x==0)
+                {
+                    borneXMin=0;
+                }
+                else if(x==9)
+                {
+                    borneXMax = 0;
+                }
+
+                if (y==0)
+                {
+                    borneYMin = 0;
+                }
+                else if (y==9)
+                {
+                    borneYMax = 0;
+                }
+
+                for(;borneXMin<=borneXMax;borneXMin++)
+                {
+                    for(int z = borneYMin;z<=borneYMax;z++)
+                    {
+                        if (tabHide[i+(borneXMin*10+z)]==10)
+                        {
+                            nbMine++;
+                        }
+                    }
+                }
+                tabHide[i]=nbMine;
+
             }
         }
+
 
         RecPaint = new Paint();
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
@@ -104,23 +146,47 @@ public class CustomView extends View
 
         for(int i=0; i<100; i++)
         {
-            if (tab[i]==1 && tabHide[i]==1 )
+            RecPaint.setTextSize(16);
+            if (tab[i]==0)
             {
-                RecPaint.setColor(Color.parseColor("#CCCCCC"));
-                canvas.drawRect((i/10)*40, (i%10)*40, (i/10)*40+40, (i%10)*40+40, RecPaint);
+
             }
-            if (tab[i]==1 && tabHide[i]==10 )
+            else if (tab[i]==1 && tabHide[i]==10 )
             {
                 RecPaint.setColor(Color.parseColor("#FF0000"));
                 canvas.drawRect((i/10)*40, (i%10)*40, (i/10)*40+40, (i%10)*40+40, RecPaint);
             }
+            else {
+                RecPaint.setColor(Color.parseColor("#CCCCCC"));
+                canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+                if (tab[i] == 1 && tabHide[i] == 1) {
+                    RecPaint.setColor(Color.parseColor("#0000FF"));
+                    canvas.drawText("1", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+                } else if (tab[i] == 1 && tabHide[i] == 2) {
+                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
+                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+                    RecPaint.setColor(Color.parseColor("#00FF00"));
+                    canvas.drawText("2", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+
+                } else if (tab[i] == 1 && tabHide[i] == 3) {
+                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
+                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+                    RecPaint.setColor(Color.parseColor("#FFFF00"));
+                    canvas.drawText("3", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+                } else if (tab[i] == 1 && tabHide[i] > 3) {
+                    RecPaint.setColor(Color.parseColor("#CCCCCC"));
+                    canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
+                    RecPaint.setColor(Color.parseColor("#FF0000"));
+                    canvas.drawText("" + tabHide[i], (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+                }
+            }
 
         }
-        RecPaint.setColor(Color.parseColor("#FFFFFF"));
-            for (int i = 0; i <= viewHeight; i = i + 40) {
-                canvas.drawLine(i, 0, i, viewWidth, RecPaint);
-                canvas.drawLine(0, i, viewHeight, i, RecPaint);
-            }
+            RecPaint.setColor(Color.parseColor("#FFFFFF"));
+                for (int i = 0; i <= viewHeight; i = i + 40) {
+                    canvas.drawLine(i, 0, i, viewWidth, RecPaint);
+                    canvas.drawLine(0, i, viewHeight, i, RecPaint);
+                }
 
 
 
