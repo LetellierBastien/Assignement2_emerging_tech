@@ -166,7 +166,7 @@ public class CustomView extends View
                     RecPaint.setColor(Color.parseColor("#CCCCCC"));
                     canvas.drawRect((i / 10) * 40, (i % 10) * 40, (i / 10) * 40 + 40, (i % 10) * 40 + 40, RecPaint);
                     RecPaint.setColor(Color.parseColor("#00FF00"));
-                    canvas.drawText("2", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint);
+                    canvas.drawText("2", (i / 10) * 40 + 18, (i % 10) * 40 + 25, RecPaint); 
 
                 } else if (tab[i] == 1 && tabHide[i] == 3) {
                     RecPaint.setColor(Color.parseColor("#CCCCCC"));
